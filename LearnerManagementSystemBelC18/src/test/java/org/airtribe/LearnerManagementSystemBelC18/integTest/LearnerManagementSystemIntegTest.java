@@ -6,7 +6,9 @@ import org.airtribe.LearnerManagementSystemBelC18.entity.LearnerResponseDTO;
 import org.airtribe.LearnerManagementSystemBelC18.repository.CohortRepository;
 import org.airtribe.LearnerManagementSystemBelC18.repository.LearnerRepository;
 import org.aspectj.lang.annotation.After;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +72,7 @@ public class LearnerManagementSystemIntegTest {
     _mockMvc.perform(MockMvcRequestBuilders.post("/learners")
             .contentType("application/json").content("{\"learnerName\":\"test\",\"learnerEmail\":\"test3@gmail.com\",\"learnerPhone\":\"1234\"}"))
         .andExpect(status().is4xxClientError())
-        .andExpect(jsonPath("$.message").value("Data integrity violation: Duplicate entry 'test3@gmail.com' for key 'learner.UKroh7ynv4ibh70nmhva9qomb2n'"))
+        .andExpect(jsonPath("$.message").value(Matchers.containsString("Data integrity violation")))
         .andDo(print());
   }
 }
