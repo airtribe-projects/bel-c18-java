@@ -42,22 +42,17 @@ public class LearnerManagementService {
   @Autowired
   private CourseRepository _courseRepository;
 
-  // ── Learner Operations ──────────────────────────────────────────────────────
-
-  @CacheEvict(value = "learners", allEntries = true)
-  public Learner createLearner(Learner learner) throws DuplicateEmailException {
+  public Learner createLearner(Learner learner) {
 //    if (_learnerRepository.findByLearnerEmail(learner.getLearnerEmail()).isPresent()) {
 //      throw new DuplicateEmailException("A learner with email '" + learner.getLearnerEmail() + "' already exists");
 //    }
     return _learnerRepository.save(learner);
   }
 
-  @Cacheable(value = "learners")
   public List<Learner> fetchAllLearners() {
     return _learnerRepository.findAll();
   }
 
-  @Cacheable(value = "learner", key = "#learnerId")
   public Learner fetchById(Long learnerId) throws LearnerNotFoundException {
     return _learnerRepository.findById(learnerId)
         .orElseThrow(() -> new LearnerNotFoundException("Could not find learner with id: " + learnerId));

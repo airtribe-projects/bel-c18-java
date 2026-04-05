@@ -19,7 +19,7 @@ import java.util.List;
 public class Learner implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long learnerId;
 
   @NotNull
