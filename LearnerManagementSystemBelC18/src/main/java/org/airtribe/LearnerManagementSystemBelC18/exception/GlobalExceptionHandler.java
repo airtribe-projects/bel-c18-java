@@ -3,6 +3,7 @@ package org.airtribe.LearnerManagementSystemBelC18.exception;
 import java.util.HashMap;
 import java.util.Map;
 import org.airtribe.LearnerManagementSystemBelC18.entity.MyErrorResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -51,5 +52,11 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(errors);
 
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new MyErrorResponse("Data integrity violation: " + ex.getMostSpecificCause().getMessage(), HttpStatus.BAD_REQUEST.value()));
   }
 }

@@ -19,6 +19,12 @@ public class LearnerResponseDTO {
     this.cohortIds = cohortIds;
   }
 
+  public LearnerResponseDTO(String learnerName, String learnerEmail, String learnerPhone) {
+    this.learnerName = learnerName;
+    this.learnerEmail = learnerEmail;
+    this.learnerPhone = learnerPhone;
+  }
+
   public Long getLearnerId() { return learnerId; }
   public void setLearnerId(Long learnerId) { this.learnerId = learnerId; }
   public String getLearnerName() { return learnerName; }

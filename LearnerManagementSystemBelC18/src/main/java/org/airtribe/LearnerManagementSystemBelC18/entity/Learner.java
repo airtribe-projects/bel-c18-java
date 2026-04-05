@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -61,6 +62,12 @@ public class Learner implements Serializable {
 
   }
 
+  public Learner(String learnerName, String learnerEmail, String learnerPhone) {
+    this.learnerName = learnerName;
+    this.learnerEmail = learnerEmail;
+    this.learnerPhone = learnerPhone;
+  }
+
   public Long getLearnerId() {
     return learnerId;
   }
@@ -99,5 +106,24 @@ public class Learner implements Serializable {
 
   public void setCohorts(List<Cohort> cohorts) {
     this.cohorts = cohorts;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Learner learner = (Learner) o;
+    return Objects.equals(learnerId, learner.learnerId) && Objects.equals(learnerName, learner.learnerName)
+        && Objects.equals(learnerEmail, learner.learnerEmail) && Objects.equals(learnerPhone, learner.learnerPhone)
+        && Objects.equals(cohorts, learner.cohorts);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(learnerId, learnerName, learnerEmail, learnerPhone, cohorts);
   }
 }
