@@ -40,6 +40,11 @@ public class Cohort {
     this.course = course;
   }
 
+  public Cohort(String cohortName, String cohortDescription) {
+    this.cohortName = cohortName;
+    this.cohortDescription = cohortDescription;
+  }
+
   public Cohort() {
 
   }
