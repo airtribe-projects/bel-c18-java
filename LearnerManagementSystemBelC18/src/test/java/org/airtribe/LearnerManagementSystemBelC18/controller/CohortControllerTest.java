@@ -1,5 +1,6 @@
 package org.airtribe.LearnerManagementSystemBelC18.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.airtribe.LearnerManagementSystemBelC18.entity.Cohort;
 import org.airtribe.LearnerManagementSystemBelC18.entity.CohortResponseDTO;
 import org.airtribe.LearnerManagementSystemBelC18.service.LearnerManagementService;
@@ -55,6 +56,47 @@ public class CohortControllerTest {
                 .andExpect(jsonPath("$.cohortName").value(_cohortResponse.getCohortName()))
                 .andExpect(jsonPath("$.cohortDescription").value(_cohortResponse.getCohortDescription()))
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void testFetchCohortById() throws Exception {
+        Mockito.when(_learnerManagementService.fetchCohortById(Mockito.anyLong()))
+                .thenReturn(_cohort);
+        Mockito.when(_learnerManagementService.toCohortResponseDTO(Mockito.any(Cohort.class)))
+                .thenReturn(_cohortResponse);
+        mockMvc.perform(MockMvcRequestBuilders.get("/cohorts/{cohortId}",1L)
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.cohortName").value(_cohortResponse.getCohortName()))
+                .andExpect(jsonPath("$.cohortDescription").value(_cohortResponse.getCohortDescription()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void testUpdateCohort() throws Exception {
+        Mockito.when(_learnerManagementService.updateCohort(Mockito.anyLong(), Mockito.any(Cohort.class)))
+                .thenReturn(_cohort);
+        Mockito.when(_learnerManagementService.toCohortResponseDTO(Mockito.any(Cohort.class)))
+                .thenReturn(_cohortResponse);
+        String cohortJson = JsonUtil.convertToJson(_cohort);
+        mockMvc.perform(MockMvcRequestBuilders.put("/cohorts/{cohortId}",1L)
+                        .contentType("application/json").content(cohortJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.cohortName").value(_cohortResponse.getCohortName()))
+                .andExpect(jsonPath("$.cohortDescription").value(_cohortResponse.getCohortDescription()))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void testDeleteCohort() throws  Exception{
+        Mockito.doNothing().when(_learnerManagementService).deleteCohort(Mockito.anyLong());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/cohorts/{cohortId}",1L)
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andDo(MockMvcResultHandlers.print());
+
+        Mockito.verify(_learnerManagementService, Mockito.times(1)).deleteCohort(Mockito.anyLong());
     }
 
 }
