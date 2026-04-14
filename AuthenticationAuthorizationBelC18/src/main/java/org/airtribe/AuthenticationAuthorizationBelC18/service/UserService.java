@@ -5,6 +5,7 @@ import org.airtribe.AuthenticationAuthorizationBelC18.entity.UserDTO;
 import org.airtribe.AuthenticationAuthorizationBelC18.entity.VerificationToken;
 import org.airtribe.AuthenticationAuthorizationBelC18.repository.UserRepository;
 import org.airtribe.AuthenticationAuthorizationBelC18.repository.VerificationTokenRepository;
+import org.airtribe.AuthenticationAuthorizationBelC18.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -74,5 +75,23 @@ public class UserService implements UserDetailsService {
       _userRepository.save(registeredUser);
       return "User verified successfully, you can now login";
     }
+  }
+
+  public String signin(String username, String password) {
+    User user = _userRepository.findByUsername(username);
+    if (user == null) {
+      return "User not found with username: " + username;
+    }
+
+    if (!user.isEnabled()) {
+      return "User is not enabled, please verify your email before signing in.";
+    }
+
+    boolean isPasswordMatch = _passwordEncoder.matches(password, user.getPassword());
+    if (!isPasswordMatch) {
+      return "Invalid Password, Please provide correct credentials.";
+    }
+
+    return JwtUtil.generateJwtToken(user);
   }
 }

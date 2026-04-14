@@ -1,13 +1,16 @@
 package org.airtribe.AuthenticationAuthorizationBelC18.config;
 
+import org.airtribe.AuthenticationAuthorizationBelC18.filter.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 
 @Configuration
+@EnableMethodSecurity
 public class AuthConfig {
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
@@ -19,7 +22,7 @@ public class AuthConfig {
     try {
       httpSecurity.csrf(csrf -> csrf.disable())
           .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-              .requestMatchers("/register", "/verifyRegistrationToken")
+              .requestMatchers("/register", "/verifyRegistrationToken", "/signin", "/hello")
               .permitAll()
               .anyRequest()
               .authenticated())
