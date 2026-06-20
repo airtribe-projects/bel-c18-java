@@ -19,6 +19,11 @@ public class CohortResponseDTO {
     this.learnerIds = learnerIds;
   }
 
+  public CohortResponseDTO(String cohortName, String cohortDescription) {
+    this.cohortName = cohortName;
+    this.cohortDescription = cohortDescription;
+  }
+
   public Long getCohortId() { return cohortId; }
   public void setCohortId(Long cohortId) { this.cohortId = cohortId; }
   public String getCohortName() { return cohortName; }

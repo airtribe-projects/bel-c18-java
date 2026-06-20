@@ -1,5 +1,6 @@
 package org.airtribe.LearnerManagementSystemBelC18.service;
 
+import java.util.List;
 import java.util.Optional;
 import net.bytebuddy.implementation.auxiliary.AuxiliaryType;
 import org.airtribe.LearnerManagementSystemBelC18.entity.Learner;
@@ -95,5 +96,36 @@ public class LearnerManagementServiceTest {
       Assertions.assertEquals("Could not find learner with id: 1", e.getMessage());
     }
 //    Assertions.assertThrows(LearnerNotFoundException.class, () -> _learnerManagementService.fetchById(1L));
+  }
+
+  @Test
+  public void testFetchAllLearners(){
+    when(_learnerRepository.findAll()).thenReturn(List.of(learner));
+
+    List<Learner> learners = _learnerManagementService.fetchAllLearners();
+    Assertions.assertEquals(1, learners.size());
+    Assertions.assertEquals(learner, learners.get(0));
+  }
+
+  @Test
+  public void testUpdateLearner() throws LearnerNotFoundException {
+
+    when(_learnerRepository.findById(anyLong())).thenReturn(Optional.ofNullable(learner));
+    Learner testData = new Learner("updatedName","updatedEmail@gmail.com","1234");
+    when(_learnerRepository.save(any(Learner.class))).thenReturn(testData);
+
+    Learner updatedLearner = _learnerManagementService.updateLearner(1L, testData);
+
+    Assertions.assertEquals(testData.getLearnerName(), updatedLearner.getLearnerName());
+    Assertions.assertEquals(testData.getLearnerEmail(), updatedLearner.getLearnerEmail());
+    Assertions.assertEquals(testData.getLearnerPhone(), updatedLearner.getLearnerPhone());
+    Assertions.assertEquals(testData.getLearnerId(), updatedLearner.getLearnerId());
+  }
+
+  @Test
+  public void testLearnerFetchByName() {
+    when(_learnerRepository.findByLearnerName(anyString())).thenReturn(learner);
+    Learner result = _learnerManagementService.fetchByName("test");
+    Assertions.assertEquals(learner, result);
   }
 }
